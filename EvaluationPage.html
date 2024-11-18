@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کارتابل شخصی</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            direction: rtl;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .header img {
+            width: 100%;
+            border-radius: 15px 15px 0 0;
+        }
+        h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            transition: background 0.3s;
+            font-size: 1em;
+        }
+        a:hover {
+            background: #45a049;
+        }
+        a i {
+            margin-left: 10px;
+            font-size: 1.2em;
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            h2 {
+                font-size: 1.2em;
+            }
+            p {
+                font-size: 0.9em;
+            }
+            a {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+    <script>
+        // تابع برای دریافت داده‌ها از API
+        async function fetchFormsData() {
+            const apiUrl = 'https://script.google.com/macros/s/AKfycbz7TYdaA7waQKsw4dxhK9wtMy5M-SLKFnv-CxerNlrVrVp75JcBfWo_4iEpId0tFTvk8g/exec'; // URL API
+            const formsContainer = document.getElementById('forms-container');
+
+            try {
+                // دریافت داده‌ها از API
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                // بررسی و نمایش داده‌ها
+                if (data && data.length > 0) {
+                    data.forEach(item => {
+                        if (item.evaluatedName && item.link) {
+                            // ساخت لینک برای هر آیتم
+                            const linkElement = document.createElement('a');
+                            linkElement.href = item.link;
+                            linkElement.target = '_blank';
+                            linkElement.innerHTML = `<i class="fas fa-edit"></i> فرم ارزیابی برای ${item.evaluatedName}`;
+                            formsContainer.appendChild(linkElement);
+                        }
+                    });
+                } else {
+                    formsContainer.innerHTML = 'هیچ داده‌ای برای نمایش موجود نیست.';
+                }
+            } catch (error) {
+                console.error('خطا در دریافت داده‌ها:', error);
+                formsContainer.innerHTML = 'خطایی در بارگذاری داده‌ها رخ داد.';
+            }
+        }
+
+        // بارگذاری داده‌ها پس از آماده شدن DOM
+        document.addEventListener('DOMContentLoaded', fetchFormsData);
+    </script>
+    <!-- لینک فونت آیکون -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://via.placeholder.com/600x150" alt="هدر کارتابل">
+        </div>
+        <h2>کارتابل شخصی</h2>
+        <p>لطفاً فرم‌های زیر را تکمیل کنید:</p>
+        <div id="forms-container">
+            <!-- لینک‌ها به طور داینامیک در اینجا قرار می‌گیرند -->
+        </div>
+    </div>
+</body>
+</html>
