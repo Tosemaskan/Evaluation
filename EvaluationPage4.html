@@ -23,10 +23,13 @@
             animation: fadeIn 1s ease-out;
         }
         .header-image {
-            width: 450px;
-            height: 200px;
-            object-fit: cover;
+            width: 100%; /* تطبیق عرض با صفحه */
+                   max-width: 450px; /* حداکثر عرض */
+                   height: auto; /* تطبیق ارتفاع */
+                   aspect-ratio: 450 / 200; /* نسبت تصویر */
+                   object-fit: cover;
             margin-bottom: 20px;
+            border-radius: 10px; /* گرد کردن لبه‌ها */
         }
         h2 {
             font-size: 1.8em;
@@ -65,7 +68,7 @@
             margin-left: 10px;
         }
         .sub-info {
-            font-size: 0.9em;
+            font-size: 0.8em;
             color: #ffeb7e;
             margin-top: 5px;
         }
@@ -145,7 +148,7 @@
              <img id="user-avatar" src="https://via.placeholder.com/70" alt="تصویر کاربر ناشناس" class="user-avatar">
             <h2 id="title-container" style="margin-right: 10px; font-size: 1.5em;"></h2>
         </div>
-        <p>فرم‌های ارزیابی برای شما در اینجا نمایش داده می‌شود:</p>
+        <p>در صورت بروز مشکل با داخلی 150 تماس حاصل فرمایید.</p>
         <div id="forms-container" class="loading">
             در حال بارگذاری فرم‌ها...
         </div>
