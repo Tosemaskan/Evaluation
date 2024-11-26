@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم ارزشیابی</title>
+    <style>
+        @font-face {
+            font-family: 'Vazir';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/Vazir.woff2') format('woff2'),
+                 url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/Vazir.woff') format('woff');
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazir', Arial, sans-serif;
+        }
+        /* استایل برای صفحه اولیه */
+        #welcome-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            height: 100%;
+            z-index: -1;
+        }
+        .button {
+            margin-bottom: 160px;
+            margin-left: 200px;
+            padding: 10px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: #A22828;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #cc5a5a;
+        }
+
+        /* استایل برای صفحه اصلی */
+        #main-page {
+            display: none; /* پیش‌فرض نمایش داده نمی‌شود */
+            font-family: 'Vazir', sans-serif;
+            direction: rtl;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fb;
+        }
+        .container {
+            max-width: 450px;
+            margin: 30px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+        /* استایل‌های دیگر از کد قبلی */
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+
+            if (id) {
+                // اگر پارامتر `id` وجود دارد، نمایش صفحه اصلی
+                document.getElementById('welcome-page').style.display = 'none';
+                document.getElementById('main-page').style.display = 'block';
+                // ادامه اجرای کد جاوااسکریپت صفحه اصلی
+                loadMainPage(id);
+            }
+        });
+
+        async function loadMainPage(id) {
+            const formsContainer = document.getElementById('forms-container');
+            const titleContainer = document.getElementById('title-container');
+            const avatarContainer = document.getElementById('user-avatar');
+
+            const apiUrl = `https://script.google.com/macros/s/AKfycbx_HPsKpCcjOhzc6LBtMjrmM5oM3mSF0Bgs4p0oNjJiWE4T64Zwc2sjbckXG7syB5jTQw/exec?id=${id}`;
+
+            formsContainer.innerHTML = '<div class="loading">در حال بارگذاری فرم‌ها...</div>';
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error(`خطای پاسخ: ${response.status}`);
+                
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    const evaluatorName = data[0][0] || 'نام ارزیاب';
+                    const evaluatorImage = data[0][14] || 'https://via.placeholder.com/70'; // لینک تصویر اول
+                    titleContainer.textContent = evaluatorName;
+                    avatarContainer.src = evaluatorImage;
+
+                    formsContainer.innerHTML = ''; // پاک کردن پیام لودینگ
+                    data.forEach(row => {
+                        const link = document.createElement('a');
+                        link.href = row[13] || '#'; // لینک فرم از ستون 13
+                        link.target = '_blank';
+                        link.classList.add('form-link');
+                        link.innerHTML = `
+                            <div style="display: flex; align-items: center;">
+                                <img src="${row[15] || 'https://via.placeholder.com/50'}" class="small-avatar" alt="تصویر دوم">
+                                <div>
+                                    <span style="font-size: 1.3em; font-weight: bold;">${row[1] || 'بدون نام'}</span>
+                                    <div class="sub-info">${row[5] || 'بدون پست سازمانی'}</div>
+                                </div>
+                            </div>
+                        `;
+                        formsContainer.appendChild(link);
+                    });
+                } else {
+                    formsContainer.innerHTML = '<p>هیچ فرم معتبری یافت نشد.</p>';
+                }
+            } catch (error) {
+                console.error('خطا در دریافت داده‌ها:', error);
+                formsContainer.innerHTML = '<div class="error-message">خطایی در بارگذاری داده‌ها رخ داد.</div>';
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- صفحه خوشامدگویی -->
+    <div id="welcome-page">
+        <img class="background" src="TextImage.png" alt="تصویر زمینه">
+        <a class="button" href="?id=hlval33lavlhhlv">ورود به سامانه ارزشیابی</a>
+    </div>
+
+    <!-- صفحه اصلی -->
+    <div id="main-page">
+        <div class="container">
+            <img src="Banner.png" alt="تصویر بالای صفحه" class="header-image">
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <img id="user-avatar" src="https://via.placeholder.com/70" alt="تصویر کاربر ناشناس" class="user-avatar">
+                <h2 id="title-container" style="margin-right: 10px; font-size: 1.5em;"></h2>
+            </div>
+            <p>در صورت بروز مشکل با داخلی 150 تماس حاصل فرمایید.</p>
+            <div id="forms-container" class="loading">در حال بارگذاری فرم‌ها...</div>
+        </div>
+    </div>
+</body>
+</html>
