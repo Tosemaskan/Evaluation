@@ -45,7 +45,7 @@
             // افزودن اسکریپت به صورت داینامیک
             const script = document.createElement("script");
             script.type = "text/javascript";
-            script.src = `https://survey.porsline.ir/embed/eyJib3JkZXIiOiJub25lIiwid2lkdGgiOiIxMDAlIiwiaGVpZ2h0IjoiMTAwJSJ9/${inputParameter}`;
+            script.src = `https://survey.porsline.ir/embed/eyJib3JkZXIiOiJub25lIiwid2lkdGgiOiIxMDAlIiwiaGVpZ2h0IjoiMTAwJSJ9/${inputParameter}/sv`;
             script.onload = () => {
                 const loader = document.getElementById("porsline-loading");
                 if (loader) loader.style.display = "none";
